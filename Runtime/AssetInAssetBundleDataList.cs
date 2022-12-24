@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 // ReSharper disable InconsistentNaming
 
@@ -42,6 +43,13 @@ namespace Kogane
         {
             m_table ??= new( a.Length );
             if ( m_table.TryGetValue( assetPath, out var result ) ) return result;
+
+            Assert.IsFalse
+            (
+                a.All( x => x.AssetPath != assetPath ),
+                $"`{assetPath}` に紐づくデータが存在しません"
+            );
+
             var assetBundleName = a.First( x => x.AssetPath == assetPath ).AssetBundleName;
             m_table[ assetPath ] = assetBundleName;
             return assetBundleName;
